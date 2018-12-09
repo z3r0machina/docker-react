@@ -15,3 +15,20 @@ services:
 
       # mount the local directory to /app
       - .:/app
+
+#  Testing Service
+#  tests:
+#    # Use Dockerfile.dev!
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
+#
+#    volumes:
+#      # bookmark the /app/node_modules directory so Docker doesn't try to remap it
+#      - /app/node_modules
+#
+#      # mount the local directory to /app
+#      - .:/app
+#
+#    # Override the starting command
+#    command: ["npm", "run", "test"]

@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  web:
+    # Use Dockerfile.dev!
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+
+    ports:
+      - "3000:3000"
+    volumes:
+      # bookmark the /app/node_modules directory so Docker doesn't try to remap it
+      - /app/node_modules
+
+      # mount the local directory to /app
+      - .:/app

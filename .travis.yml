@@ -19,6 +19,6 @@ script:
 deploy:
   provider: gae
   keyfile: docker-react-225006-73a8cc3c2313.json
-  project: docker-react
+  project: docker-react-225006
   skip_cleanup: true
   default: true

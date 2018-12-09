@@ -1,0 +1,15 @@
+# Docker requires superuser permissions.
+sudo: required
+
+# Tell Travis we need Docker pre-installed.
+services:
+  - docker
+
+
+# Lifecycle definitions
+before_install:
+  - docker build -t z3r0machina/docker-react -f Dockerfile.dev .
+
+# Contains commands needed to run our test suite.
+script:
+  - docker run z3r0machina/docker-react npm run test -- --coverage

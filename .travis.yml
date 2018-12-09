@@ -8,7 +8,7 @@ services:
 
 # Lifecycle definitions
 before_install:
-  - openssl aes-256-cbc -K $encrypted_264370824ccc_key -iv $encrypted_264370824ccc_iv -in docker-react-225006-73a8cc3c2313.json.enc -out docker-react-225006-73a8cc3c2313.json -d
+  - openssl aes-256-cbc -K $encrypted_264370824ccc_key -iv $encrypted_264370824ccc_iv -in docker-react-225006-386f7afca0f8.json.enc -out docker-react-225006-386f7afca0f8.json -d
   - docker build -t z3r0machina/docker-react -f Dockerfile.dev .
 
 # Contains commands needed to run our test suite.
@@ -18,7 +18,9 @@ script:
 # Deploy to GCP
 deploy:
   provider: gae
-  keyfile: docker-react-225006-73a8cc3c2313.json
+  keyfile: docker-react-225006-386f7afca0f8.json
   project: docker-react-225006
   skip_cleanup: true
   default: true
+  on:
+    branch: master

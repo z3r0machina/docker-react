@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 
-COPY . .
+# Since we are mounting the local directory, this is no longer needed.
+#COPY . .
 
 CMD ["npm", "run", "start"]

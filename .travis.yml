@@ -8,19 +8,60 @@ services:
 
 # Lifecycle definitions
 before_install:
-  - openssl aes-256-cbc -K $encrypted_264370824ccc_key -iv $encrypted_264370824ccc_iv -in docker-react-225006-386f7afca0f8.json.enc -out docker-react-225006-386f7afca0f8.json -d
+  # Decrypt keyfile for GCP
+  #- openssl aes-256-cbc -K $encrypted_264370824ccc_key -iv $encrypted_264370824ccc_iv -in docker-react-225006-386f7afca0f8.json.enc -out docker-react-225006-386f7afca0f8.json -d
+
   - docker build -t z3r0machina/docker-react -f Dockerfile.dev .
 
 # Contains commands needed to run our test suite.
 script:
   - docker run z3r0machina/docker-react npm run test -- --coverage
 
-# Deploy to GCP
+# Deploy to AWS BeanStalk
 deploy:
-  provider: gae
-  keyfile: docker-react-225006-386f7afca0f8.json
-  project: docker-react-225006
-  skip_cleanup: true
-  default: true
+  # Travis CI comes preconfigured to deploy apps to different providers such as
+  # GAE, AWS Beanstalk, etc.
+  provider: elasticbeanstalk
+
+  # Region where you created the EBS instance.
+  region: "us-east-2"
+
+  # Name of the app used when creating the EBS instance.
+  app: "docker-react"
+
+  # When we created the application, it is just setting up a common set of
+  # config. The environment is the actual app.
+  env: "DockerReact-env"
+
+  # When Travis decides to deploy your codebase, it will take all the files in
+  # your GH repo, zip it up, and copy it over to an S3 bucket, essentially a
+  # hard drive running on AWS. Travis will then tell EBS where it put the
+  # files so EBS can redeploy the app. bucket_name is the name of the bucket
+  # where the zip will be copied to.
+  bucket_name: elasticbeanstalk-us-east-2-736171269890
+
+  # The S3 bucket above is reused for all other EBS environments that you
+  # create. bucket_path lets you specify a path inside this shared storage.
+  bucket_path: "docker-react"
+
+  # Get the access key ID and secret access key from the environment. This uses
+  # environment variables defined in the project on Travis CI.
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
+
+
+  # Only attempt to deploy the application when the master branch has new
+  # commits.
   on:
     branch: master
+
+# Deploy to GCP
+#deploy:
+#  provider: gae
+#  keyfile: docker-react-225006-386f7afca0f8.json
+#  project: docker-react-225006
+#  skip_cleanup: true
+#  default: true
+#  on:
+#    branch: master
